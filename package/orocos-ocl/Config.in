@@ -1,0 +1,74 @@
+config BR2_PACKAGE_OROCOS_OCL
+	bool "orocos-ocl"
+	select BR2_PACKAGE_OMNIORB
+	select BR2_PACKAGE_OROCOS_RTT
+	select BR2_PACKAGE_OROCOS_LOG4CPP
+	select BR2_PACKAGE_READLINE
+	help
+	Orocos Component Library
+	  The Orocos 2 toolchain is your primary tool to create real-time robotics applications
+	using modular, run-time configurable software components. OCL is the Orocos Component
+	Library, the necessary components to start an application and interact with it at 
+	run-time.
+
+	  http://www.orocos.org
+
+menu "Orocos Component Library configuration"
+	depends on BR2_PACKAGE_OROCOS_OCL
+
+config BR2_PACKAGE_OROCOS_OCL_DEPLOYMENT
+	bool "Dynamic Deployment"
+	default y
+	help
+	Orocos deployer
+	  A Component for deploying (configuring) other components in an
+	application. It allows to create connections between components,
+	load the properties and scripts for components and setup
+	component activities.
+
+config BR2_PACKAGE_OROCOS_OCL_HELLOWORLD
+	bool "Hello World Component"
+	default n
+	help
+	Hello world component
+	  Compile a simple component to begin with Orocos. 
+	Unless you are doing a sandbox, say no.
+
+config BR2_PACKAGE_OROCOS_OCL_LOGGING
+	bool "Logging system"
+	default y
+	help
+	  Allow Real Time Logging service. It uses orocos-log4cpp.
+
+config BR2_PACKAGE_OROCOS_OCL_LUA
+	bool "Lua addon"
+	default y
+	help
+	  Integrate Lua for scripting/deployment.
+
+config BR2_PACKAGE_OROCOS_OCL_REPORTING
+	bool "Reporting Component"
+	default n
+	help
+	  The Reporter is a component that let you tracing dataflows between components. It is a debugging tool.
+
+config BR2_PACKAGE_OROCOS_OCL_TASKBROWSER
+	bool "Taskbrowser"
+	default y
+	help
+	  The Taskbrowser is a command line tool that allows you to deploy, manage, monitor, debug your application at run time.
+
+config BR2_PACKAGE_OROCOS_OCL_TIMER
+	bool "Timers"
+	default y
+	help
+	  Include a timer Component that helps generating events triggered on time.
+
+config BR2_PACKAGE_OROCOS_OCL_RTALLOC
+	bool "RT Alloc"
+	select BR2_PACKAGE_READLINE
+	default n
+	help
+	  Build with rt-malloc support.
+
+endmenu

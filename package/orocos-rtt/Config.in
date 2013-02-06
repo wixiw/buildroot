@@ -1,0 +1,65 @@
+config BR2_PACKAGE_OROCOS_RTT
+	bool "orocos-rtt"
+	select BR2_PACKAGE_BOOST
+	select BR2_PACKAGE_OMNIORB
+	select BR2_PACKAGE_BOOST_CONFIG_THREADING
+	select BR2_PACKAGE_BOOST_FILESYSTEM
+	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
+	select BR2_PACKAGE_BOOST_SERIALIZATION
+	select BR2_PACKAGE_BOOST_SYSTEM
+	help
+	Real Time toolkit
+	  The Orocos 2 toolchain is your primary tool to create real-time robotics applications
+	using modular, run-time configurable software components. RTT is the Real-Time Toolkit,
+	a component framework that allows us to write real-time components in C++.
+
+	  http://www.orocos.org
+
+menu "Real Time Toolkit configuration"
+	depends on BR2_PACKAGE_OROCOS_RTT
+
+config BR2_PACKAGE_OROCOS_RTT_OS_EMBEDDED_SCRIPTING
+	bool "Embedded Scripting"
+	default y
+	help
+	  TODO.
+
+#config BR2_PACKAGE_OROCOS_RTT_ENABLE_CORBA
+#	bool "Corba integration"
+#	default n
+#	help
+#	  Enable Corba for network Port connectivity.
+# Requires to choose between : TAO end Omniorb...
+
+config BR2_PACKAGE_OROCOS_RTT_ENABLE_MQ
+	bool "Message queue data flow."
+	default y
+	help
+	Message Queue Transport.
+	  This transport allows to do inter-process communication between Orocos processes
+	on the same node. It uses the POSIX messages queues where available. This includes
+	GNU/Linux systems and Xenomai.
+	MQueue also requires the boost::serialization	library.
+
+config BR2_PACKAGE_OROCOS_RTT_ACT_DEFAULT_ACTIVITY
+	bool "Default Activity in Components"
+	default n
+	help
+	Default Activity.
+	  Give a default activity to components. Activate this if you are not abble 
+	to define activities to component at deployment time. In general you will say
+	no as you will precise if the activity is periodic or not.
+
+config BR2_PACKAGE_OROCOS_RTT_PLUGINS_ENABLE
+	bool "Plugins support"
+	default y
+	help
+	  Activate RTT plugins support.
+
+config BR2_PACKAGE_OROCOS_RTT_PLUGINS_ENABLE_TYPEKIT
+	bool "Typekit plugins"
+	default y
+	help
+	  Enable typekits.
+
+endmenu

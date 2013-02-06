@@ -599,6 +599,12 @@ endmenu
 
 endmenu
 
+menu "Middleware"
+source "package/orocos-log4cpp/Config.in"
+source "package/orocos-rtt/Config.in"
+source "package/orocos-ocl/Config.in"
+endmenu
+
 menu "Miscellaneous"
 source "package/collectd/Config.in"
 source "package/empty/Config.in"
