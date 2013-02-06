@@ -3,28 +3,94 @@
 Beyond Buildroot
 ================
 
-Boot the generated images
--------------------------
+After having run Buildroot, you will have a brand new filesystem for your target in the images folder as described un xref:using[]. The content of this directory depends on the selected options in the Buildroot
+configuration, especially those from the "Filesystem images" sub-menu. 
 
-NFS boot
-~~~~~~~~
+So what's next ? You will probably want to :
 
-To achieve NFS-boot, enable _tar root filesystem_ in the _Filesystem
-images_ menu.
+* generate a virtual disk to dump to real system or to use in virtualization systems (http://wiki.qemu.org/Main_Page[Qemu], https://www.virtualbox.org/[VirtualBox],...)
+
+* test your kernel and your rootfs in virtualization systems
+
+* install your rootfs on the target to test it
+
+This stuff is really depending on each project and hardware, so we cannot describe every solutions here, and this is where Buildroot's work ends. The following section aims at guiding new user on what to do next to avoid staying in the dark. It is *not* an exact guide on how to precisely do what is described. Please take the time to have a look to referred projects to get those details.
+
+Generate a bootable raw disk file
+---------------------------------
+
+If you plan to use virtual machines, or to copy a binary bootable image to your target, you will need to create a _disk image_. To create a bootable raw disk file you will need to :
+
+(be carefull with the following commands, you can severely damage your host)
+
+* create an empty file with "dd" 
+
+* partition the file as a disk with "fdisk" 
+
+* set the MBR
+
+* create nodes in /dev pointing to your _disk image_ partitions (as you will have with /dev/sda, /dev/sda1, /dev/sda2,...) with http://robert.penz.name/73/kpartx-a-tool-for-mounting-partitions-within-an-image-file/[kpartx] 
+
+* mount one (or several) partition of your virtual disk with with the +mount+ command 
+
+* extract your rootfs, boot folder, home directory and any other content into them. Note that if you select the ext2 filesystem generation, you can also directly dump ths ext2 image into the right partition itself.
+
+Network boot
+-------------
+
+Some device doesn't have external memory and need to be booted to be able to install the rootfs. A nice way of doing this is to boot from the network. If your device allows you to do that you will be able to :
+
+* test the in-progress-rootfs without installing it on your system (it prevents ruining flash memories)
+
+* create a second Buildroot project with a minimalist installer that will install your production rootfs on the target.
+
+
+Network PXE bootloaders
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To fully boot on the network you need a network bootloader. This is optional and you could use your classic bootloader to mount a NFS rootfs.
+
+http://download.intel.com/design/archives/wfm/downloads/pxespec.pdf[PXE] is a specification that has been implemented at least by http://www.syslinux.org/wiki/index.php/PXELINUX[PXELINUX] and http://ipxe.org/[iPXE].
+
+The main idea is to have a DHCP server that provide a link to a generic boot ROM that is accessible from a simple FTP server (e.g.: TFTP). Then your target boots with it and come back to the FTP server to get the specific stuff (for instance it's boot menu).
+
+Here is some hints on how to setup this :
+http://www.digitalpeer.com/id/linuxnfs
+
+
+NFS rootfs mount on+"/+
+~~~~~~~~~~~~~~~~~~~~~~~
+
+The idea is to mount +/+ with a network shared folder from a http://tldp.org/HOWTO/NFS-HOWTO/index.html[NFS] server (in general your develop host system). To enable the NFS-boot, you should enable the _tar root filesystem_ option in the _Filesystem images_ menu.
+
+Your embedded kernel needs at least the following options :
+
+* NFS filesystem support (+CONFIG_NFS_FS+).
+
+* Root file system on NFS (+CONFIG_ROOT_NFS+).
+
+* Ethernet (+CONFIG_NET_ETHERNET+).
+
+* The ethernet driver for the embedded network card.
+
+* IP: kernel level autoconfiguration (+CONFIG_IP_PNP+, +CONFIG_IP_PNP_BOOTTP+, +CONFIG_IP_PNP_DHCP+).
 
 After a complete build, just run the following commands to setup the
-NFS-root directory:
+NFS-root directory of the server :
 
 -------------------
 sudo tar -xavf /path/to/output_dir/rootfs.tar -C /path/to/nfs_root_dir
 -------------------
 
-Remember to add this path to +/etc/exports+.
+Remember to add this path to +/etc/exports+ and run +exportfs -ra+ to take changes into account.
 
 Then, you can execute a NFS-boot from your target.
 
-Chroot
-------
+
+
+
+Chroot into generated image
+---------------------------
 
 If you want to chroot in a generated image, then there are few thing
 you should be aware of:

@@ -1,0 +1,6 @@
+// -*- mode:doc; -*-
+
+What's next ?
+------------------------
+
+After having done your work with Buildroot, you will certainly want to use what you produced. The generated images has to be fitted on your board. This is a plain activity, higly depending on your hardware and is beyond the scope of Buildroot. Nevertheless, you can have a look at hints from xref:beyond-buildroot[]

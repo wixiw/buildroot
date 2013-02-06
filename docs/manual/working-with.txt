@@ -16,6 +16,8 @@ include::common-usage.txt[]
 
 include::eclipse-integration.txt[]
 
+include::what-is-next.txt[]
+
 Hacking Buildroot
 -----------------
 

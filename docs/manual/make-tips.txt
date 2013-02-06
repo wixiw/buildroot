@@ -53,6 +53,18 @@ and target trees, the images and the toolchain):
  $ make clean
 --------------------
 
+
+The present manual sources are in the buildroot/docs/manual folder. You may compile them with :
+
+---------------------------------
+ $ make manual-clean
+ $ make manual
+---------------------------------
+
+The output documentation is provided in the buildroot/output/docs/manual folder.
+
+*Note* : asciidoc is required to build it. There is a known issue that you can't build it under Dedian Squeeze.
+
 To delete all build products as well as the configuration:
 
 --------------------
